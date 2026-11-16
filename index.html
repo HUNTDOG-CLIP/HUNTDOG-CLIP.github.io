@@ -135,10 +135,14 @@ nav .btn{padding:11px 14px;font-size:10px;box-shadow:3px 3px 0 var(--ink)}
 .note{font-size:12px;color:var(--dim);margin-top:30px;max-width:720px}
 
 /* ================= ANTES / DESPUÉS ================= */
-.ba{position:relative;max-width:820px;aspect-ratio:16/9;border:3px solid var(--pearl);box-shadow:10px 10px 0 var(--red);overflow:hidden;user-select:none}
-.ba .layer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--vt);font-size:34px}
-.ba .before{background:#2a2a2a;color:#777;filter:grayscale(1)}
-.ba .after{background:var(--pearl);color:var(--ink);clip-path:inset(0 0 0 50%)}
+.ba{position:relative;width:min(320px,100%);margin:0 auto;aspect-ratio:9/16;border:3px solid var(--pearl);box-shadow:10px 10px 0 var(--red);overflow:hidden;user-select:none}
+.ba .layer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;font-family:var(--vt);font-size:28px;line-height:1}
+.ba .before{background:#2a2a2a;color:#777;filter:grayscale(1);justify-content:flex-start;padding-left:9%}
+.ba .after{background:var(--pearl);color:var(--ink);clip-path:inset(0 0 0 50%);justify-content:flex-end;padding-right:9%}
+.ba .layer:has(img,video){padding:0}
+.ba-head{margin-inline:auto;text-align:center}
+.ba-head .label{justify-content:center}
+.ba-head .label::after{display:none}
 .ba .layer img,.ba .layer video{width:100%;height:100%;object-fit:cover}
 .ba .lbl{position:absolute;top:12px;font-family:var(--px);font-size:10px;padding:6px 8px;z-index:3;background:var(--ink);color:var(--pearl);border:2px solid var(--pearl)}
 .ba .lbl.l{left:12px}.ba .lbl.r{right:12px;background:var(--red)}
@@ -317,15 +321,15 @@ footer .bar{color:var(--red);overflow:hidden;white-space:nowrap;margin-bottom:10
 <!-- ================= ANTES / DESPUÉS ================= -->
 <section class="dark scan">
   <div class="wrap">
-    <div class="head">
+    <div class="head ba-head">
       <div class="label">[02] // COMPARACIÓN</div>
       <h2>Antes <span class="red">/</span> después</h2>
       <p>Arrastra la barra: a la izquierda el video tal como se grabó, a la derecha el clip que entrego.</p>
     </div>
     <div class="ba" id="ba">
       <!-- Cambia el texto por <img src="antes.jpg"> y <img src="despues.jpg"> o por videos -->
-      <div class="layer before">VIDEO ORIGINAL</div>
-      <div class="layer after">CLIP HUNTDOG</div>
+      <div class="layer before">VIDEO<br>ORIGINAL</div>
+      <div class="layer after">CLIP<br>HUNTDOG</div>
       <span class="lbl l">ANTES</span><span class="lbl r">DESPUÉS</span>
       <div class="bar"></div>
       <input type="range" min="0" max="100" value="50" aria-label="Comparar antes y después">
