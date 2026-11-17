@@ -139,7 +139,8 @@ nav .btn{padding:11px 14px;font-size:10px;box-shadow:3px 3px 0 var(--ink)}
 .ba .layer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;font-family:var(--vt);font-size:28px;line-height:1}
 .ba .before{background:#2a2a2a;color:#777;filter:grayscale(1);justify-content:flex-start;padding-left:9%}
 .ba .after{background:var(--pearl);color:var(--ink);clip-path:inset(0 0 0 50%);justify-content:flex-end;padding-right:9%}
-.ba .layer:has(img,video){padding:0}
+.ba .layer:has(img,video){padding:0;filter:none}
+.ba img{pointer-events:none;user-select:none}
 .ba-head{margin-inline:auto;text-align:center}
 .ba-head .label{justify-content:center}
 .ba-head .label::after{display:none}
@@ -282,12 +283,10 @@ footer .bar{color:var(--red);overflow:hidden;white-space:nowrap;margin-bottom:10
     </div>
 
     <div class="device">
-      <div class="top"><span>CLIP_001.MP4</span><b>9:16</b></div>
+      <div class="top"><span>ILLOJUAN_GTA5.MP4</span><b>9:16</b></div>
       <div class="screen">
         <span class="rec">REC</span>
-        <!-- Pon aquí tu mejor clip: <video src="clips/clip1.mp4" autoplay muted loop playsinline></video> -->
-        [ tu mejor clip aquí ]
-        <span class="cap">ESTO ES <em>LOCURA</em></span>
+        <video src="clips/stream.mp4" poster="clips/stream.jpg" autoplay muted loop playsinline preload="metadata"></video>
       </div>
     </div>
   </div>
@@ -309,12 +308,11 @@ footer .bar{color:var(--red);overflow:hidden;white-space:nowrap;margin-bottom:10
       <p>Clips terminados y listos para subir. Actívales el sonido para verlos como en el celular.</p>
     </div>
     <div class="clips">
-      <!-- Para cada clip: pon <video src="clips/archivo.mp4" controls playsinline></video> dentro de .vid -->
-      <div class="clip"><div class="vid">[ CLIP_01 ]</div><div class="meta"><h3>Título del clip</h3><small>STREAMS</small></div></div>
-      <div class="clip"><div class="vid">[ CLIP_02 ]</div><div class="meta"><h3>Título del clip</h3><small>PODCAST</small></div></div>
-      <div class="clip"><div class="vid">[ CLIP_03 ]</div><div class="meta"><h3>Título del clip</h3><small>CLIP PARA ARTISTAS</small></div></div>
+      <div class="clip"><div class="vid"><video src="clips/stream.mp4" poster="clips/stream.jpg" controls playsinline preload="none"></video></div><div class="meta"><h3>Illojuan encuentra el fantasma de GTA 5</h3><small>STREAMS · 0:38</small></div></div>
+      <div class="clip"><div class="vid"><video src="clips/podcast.mp4" poster="clips/podcast.jpg" controls playsinline preload="none"></video></div><div class="meta"><h3>Matt Rife vs Bobby: "nunca fuiste joven"</h3><small>PODCAST · 0:34 · EN INGLÉS</small></div></div>
+      <div class="clip"><div class="vid"><video src="clips/artistas.mp4" poster="clips/artistas.jpg" controls playsinline preload="none"></video></div><div class="meta"><h3>ZXKAI — No Batidão (anime edit)</h3><small>CLIP PARA ARTISTAS · 0:18</small></div></div>
     </div>
-    <p class="note">* Nuevos ejemplos en camino. Mientras tanto, pide tus 2 clips gratis y comprueba el estilo con tu propio contenido.</p>
+    <p class="note">* Ejemplos hechos con contenido público de Illojuan, Bad Friends y la canción "No Batidão" de ZXKAI, solo para mostrar el estilo de edición. No son clientes ni trabajos encargados.</p>
   </div>
 </section>
 
@@ -327,9 +325,8 @@ footer .bar{color:var(--red);overflow:hidden;white-space:nowrap;margin-bottom:10
       <p>Arrastra la barra: a la izquierda el video tal como se grabó, a la derecha el clip que entrego.</p>
     </div>
     <div class="ba" id="ba">
-      <!-- Cambia el texto por <img src="antes.jpg"> y <img src="despues.jpg"> o por videos -->
-      <div class="layer before">VIDEO<br>ORIGINAL</div>
-      <div class="layer after">CLIP<br>HUNTDOG</div>
+      <div class="layer before"><img src="clips/antes.jpg" alt="Video original del stream en horizontal"></div>
+      <div class="layer after"><img src="clips/despues.jpg" alt="El mismo momento editado en vertical con subtítulos"></div>
       <span class="lbl l">ANTES</span><span class="lbl r">DESPUÉS</span>
       <div class="bar"></div>
       <input type="range" min="0" max="100" value="50" aria-label="Comparar antes y después">
