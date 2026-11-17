@@ -69,6 +69,11 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:6
 .logo svg{width:34px;height:auto}
 .links{display:flex;gap:4px;font-size:13px}
 .links a{padding:6px 10px;border:2px solid transparent}
+.lang{display:flex;border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);margin-left:auto}
+.lang button{font-family:var(--px);font-size:10px;padding:9px 9px;border:0;background:var(--pearl);color:var(--ink);cursor:pointer}
+.lang button+button{border-left:3px solid var(--ink)}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--pearl)}
+.lang button:hover{background:var(--red);color:var(--pearl)}
 .links a:hover{border-color:var(--ink);background:var(--ink);color:var(--pearl)}
 nav .btn{padding:11px 14px;font-size:10px;box-shadow:3px 3px 0 var(--ink)}
 @media(max-width:860px){.links{display:none}}
@@ -90,7 +95,7 @@ nav .btn{padding:11px 14px;font-size:10px;box-shadow:3px 3px 0 var(--ink)}
 @keyframes blink{50%{opacity:0}}
 .lead{font-size:16px;max-width:560px;margin-bottom:26px}
 .offer{border:3px dashed var(--pearl);padding:20px;max-width:560px;position:relative}
-.offer::before{content:"[ PRUEBA GRATIS ]";position:absolute;top:-12px;left:16px;background:var(--ink);color:var(--red);font-size:12px;padding:0 8px;font-weight:700}
+.offer::before{content:attr(data-tag);position:absolute;top:-12px;left:16px;background:var(--ink);color:var(--red);font-size:12px;padding:0 8px;font-weight:700}
 .offer strong{font-family:var(--vt);font-size:28px;font-weight:400;display:block;line-height:1.05;margin-bottom:6px;color:var(--pearl)}
 .offer p{font-size:14px;margin-bottom:18px}
 .row{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
@@ -252,6 +257,7 @@ footer .bar{color:var(--red);overflow:hidden;white-space:nowrap;margin-bottom:10
       <a href="#paquetes">Paquetes</a>
       <a href="#faq">FAQ</a>
     </div>
+    <div class="lang" role="group" aria-label="Idioma / Language"><button type="button" data-l="es">ES</button><button type="button" data-l="en">EN</button></div>
     <a href="#gratis" class="btn">2 clips gratis</a>
   </div>
 </nav>
@@ -266,14 +272,14 @@ footer .bar{color:var(--red);overflow:hidden;white-space:nowrap;margin-bottom:10
       <h1>Rastreo tu stream.<br>Cazo el momento.<br><span class="red">Te lo entrego listo</span><span class="cursor"></span></h1>
       <p class="lead">Soy Nicolas. Convierto tus directos, podcasts y videos largos en clips verticales para TikTok, Reels y Shorts. Como un galgo: rápido y sin soltar la presa.</p>
 
-      <div class="offer">
+      <div class="offer" data-tag="[ PRUEBA GRATIS ]">
         <strong>2 clips gratis de tu último video</strong>
         <p>Sin pagar nada y sin compromiso. Si te gustan, hablamos de un paquete.</p>
         <div class="row">
           <a class="btn js-wa" target="_blank" rel="noopener">&gt; WhatsApp</a>
           <a class="btn alt js-mail">&gt; Correo</a>
         </div>
-        <div class="mail">o escríbeme: <code class="js-mail-text"></code><button class="copy js-copy">copiar</button></div>
+        <div class="mail"><span class="t-i">o escríbeme:</span> <code class="js-mail-text"></code><button class="copy js-copy">copiar</button></div>
       </div>
 
       <div class="stats">
@@ -515,14 +521,14 @@ footer .bar{color:var(--red);overflow:hidden;white-space:nowrap;margin-bottom:10
       <a class="btn alt js-ig" target="_blank" rel="noopener">&gt; Instagram</a>
       <a class="btn alt js-dc" target="_blank" rel="noopener">&gt; Discord</a>
     </div>
-    <div class="mail">o por correo: <code class="js-mail-text"></code><button class="copy js-copy">copiar</button></div>
+    <div class="mail"><span class="t-i">o por correo:</span> <code class="js-mail-text"></code><button class="copy js-copy">copiar</button></div>
   </div>
 </section>
 
 <footer>
   <div class="bar">░▒▓█ HUNTDOG CLIPPER █▓▒░ ░▒▓█ HUNTDOG CLIPPER █▓▒░ ░▒▓█ HUNTDOG CLIPPER █▓▒░</div>
   <p style="margin-bottom:6px"><a class="js-ig" target="_blank" rel="noopener" style="color:var(--pearl);border-bottom:2px solid var(--red)">@huntdog.clipper</a></p>
-  Clips para creadores · Hecho por Nicolas desde Santa Cruz, Bolivia · © <span id="y"></span>
+  <span class="t-i">Clips para creadores · Hecho por Nicolas desde Santa Cruz, Bolivia ·</span> © <span id="y"></span>
 </footer>
 
 <a class="float-wa js-wa" target="_blank" rel="noopener" aria-label="WhatsApp">
@@ -620,33 +626,211 @@ const t = " ▓ CLIPS VERTICALES ▓ TIKTOK ▓ REELS ▓ SHORTS ▓ 1080×1920 
 document.getElementById('tick').textContent = t.repeat(6);
 
 /* ---------- Contacto ---------- */
-document.querySelectorAll('.js-wa').forEach(a=>{
-  a.href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(a.dataset.msg || MENSAJE)}`;
-});
-document.querySelectorAll('.js-mail').forEach(a=>a.href=`mailto:${CORREO}?subject=${encodeURIComponent('Clips de muestra - HUNTDOG')}`);
+let LANG = 'es';
+const L = (es, en) => LANG === 'en' ? en : es;
+const WA_EN = {
+  "Hola Nicolas, me interesa el paquete Cachorro": "Hi Nicolas, I'm interested in the Puppy package",
+  "Hola Nicolas, me interesa el paquete Galgo": "Hi Nicolas, I'm interested in the Greyhound package",
+  "Hola Nicolas, me interesa el paquete Bull Terrier": "Hi Nicolas, I'm interested in the Bull Terrier package"
+};
+function applyContact(){
+  document.querySelectorAll('.js-wa').forEach(a=>{
+    const es = a.dataset.msg || MENSAJE;
+    const msg = LANG==='en' ? (WA_EN[es] || "Hi Nicolas, I want my 2 free sample clips") : es;
+    a.href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
+  });
+  document.querySelectorAll('.js-mail').forEach(a=>a.href=`mailto:${CORREO}?subject=${encodeURIComponent(L('Clips de muestra - HUNTDOG','Sample clips - HUNTDOG'))}`);
+  document.querySelectorAll('.js-dc').forEach(a=>a.title=L('Copiar usuario de Discord','Copy Discord username'));
+}
 document.querySelectorAll('.js-mail-text').forEach(c=>c.textContent=CORREO);
 document.querySelectorAll('.js-ig').forEach(a=>a.href=INSTAGRAM);
 document.querySelectorAll('.js-dc').forEach(a=>{
   if(!DISCORD){ a.remove(); return; }
   const label = `Discord: ${DISCORD}`;
   a.textContent = label; a.removeAttribute('href'); a.removeAttribute('target');
-  a.title = 'Copiar usuario de Discord'; a.style.textTransform = 'none';
+  a.style.textTransform = 'none';
   a.onclick = async()=>{
-    try{ await navigator.clipboard.writeText(DISCORD); a.textContent='¡Usuario copiado!'; }
+    try{ await navigator.clipboard.writeText(DISCORD); a.textContent=L('¡Usuario copiado!','Username copied!'); }
     catch(e){ a.textContent = DISCORD; }
     setTimeout(()=>a.textContent=label,1800);
   };
 });
 document.querySelectorAll('.js-copy').forEach(b=>b.onclick=async()=>{
-  try{await navigator.clipboard.writeText(CORREO);b.textContent='¡copiado!';}catch(e){b.textContent='cópialo a mano';}
-  setTimeout(()=>b.textContent='copiar',1800);
+  try{ await navigator.clipboard.writeText(CORREO); b.textContent=L('¡copiado!','copied!'); }
+  catch(e){ b.textContent=L('cópialo a mano','copy it manually'); }
+  setTimeout(()=>b.textContent=L('copiar','copy'),1800);
 });
+applyContact();
 
 /* ---------- Antes / después ---------- */
 const ba=document.getElementById('ba'), rg=ba.querySelector('input');
 rg.oninput=()=>{ba.querySelector('.after').style.clipPath=`inset(0 0 0 ${rg.value}%)`;ba.querySelector('.bar').style.left=rg.value+'%';};
 
 document.getElementById('y').textContent=new Date().getFullYear();
+
+/* ---------- Idioma ES / EN ---------- */
+const EN = {
+  "Ejemplos":"Work", "Proceso":"Process", "Paquetes":"Pricing",
+  "2 clips gratis":"2 free clips",
+  'Rastreo tu stream.<br>Cazo el momento.<br><span class="red">Te lo entrego listo</span><span class="cursor"></span>':
+    'I track your stream.<br>I hunt the moment.<br><span class="red">You get it ready to post</span><span class="cursor"></span>',
+  "Soy Nicolas. Convierto tus directos, podcasts y videos largos en clips verticales para TikTok, Reels y Shorts. Como un galgo: rápido y sin soltar la presa.":
+    "I'm Nicolas. I turn your streams, podcasts and long videos into vertical clips for TikTok, Reels and Shorts. Like a greyhound: fast and never letting go of the prey.",
+  "2 clips gratis de tu último video":"2 free clips from your latest video",
+  "Sin pagar nada y sin compromiso. Si te gustan, hablamos de un paquete.":"No payment, no commitment. If you like them, we talk about a package.",
+  "&gt; Correo":"&gt; Email", "Correo":"Email",
+  "o escríbeme:":"or write me:", "o por correo:":"or by email:", "copiar":"copy",
+  "<b>▸</b> Entrega 1–4 días":"<b>▸</b> Delivery in 1–4 days",
+  "// persiguiendo el próximo viral...":"// chasing the next viral...",
+  "[01] // PORTAFOLIO":"[01] // PORTFOLIO", "[02] // COMPARACIÓN":"[02] // COMPARISON",
+  "[03] // EQUIPO DE CAZA":"[03] // HUNTING GEAR", "[04] // FICHA TÉCNICA":"[04] // SPECS",
+  "[05] // PROCESO":"[05] // PROCESS", "[06] // PRECIOS":"[06] // PRICING",
+  "[07] // EL CAZADOR":"[07] // THE HUNTER",
+  'Presas <span class="red">cazadas</span>':'Hunted <span class="red">prey</span>',
+  'Antes <span class="red">/</span> después':'Before <span class="red">/</span> after',
+  'Qué lleva <span class="red">cada clip</span>':"What's in <span class=\"red\">every clip</span>",
+  'Calidad <span class="red">de verdad</span>':'Real <span class="red">quality</span>',
+  'Cómo <span class="red">trabajamos</span>':'How we <span class="red">work</span>',
+  'Paquetes <span class="red">semanales</span>':'Weekly <span class="red">packages</span>',
+  'Soy <span class="red">Nicolas</span>':"I'm <span class=\"red\">Nicolas</span>",
+  'Preguntas <span class="red">frecuentes</span>':'Frequently asked <span class="red">questions</span>',
+  'Empieza con <span class="red">2 clips gratis</span>':'Start with <span class="red">2 free clips</span>',
+  "Clips terminados y listos para subir. Actívales el sonido para verlos como en el celular.":"Finished clips, ready to post. Turn the sound on to watch them like on your phone.",
+  "Arrastra la barra: a la izquierda el video tal como se grabó, a la derecha el clip que entrego.":"Drag the bar: on the left, the video as it was recorded; on the right, the clip I deliver.",
+  "Lo que ves en los ejemplos, aplicado a tu contenido.":"What you see in the examples, applied to your content.",
+  "Trabajo desde el archivo original y ajusto el audio al nivel que usan las plataformas.":"I work from the original file and set the audio to the level platforms use.",
+  "Tú sigues creando contenido. Yo me encargo de los clips.":"You keep creating content. I take care of the clips.",
+  "Elige según cuánto publicas. Precios en USD.":"Choose based on how much you post. Prices in USD.",
+  "¿Tienes otra duda? Escríbeme y te respondo yo.":"Another question? Write me and I'll answer personally.",
+  "Rubius le cierra la puerta a su amigo… y llega el karma":"Rubius shuts the door on his friend… and karma strikes",
+  'Matt Rife vs Bobby: "nunca fuiste joven"':'Matt Rife vs Bobby: "you were never young"',
+  "Covers en TikTok":"Covers on TikTok",
+  "Me llegaron $350 por subir clips":"I got $350 for posting clips",
+  "De 200 vistas a 300 TikToks con mi canción":"From 200 views to 300 TikToks with my song",
+  "PODCAST · 0:34 · EN INGLÉS":"PODCAST · 0:34 · IN ENGLISH",
+  "CLIP PARA ARTISTAS · 0:19":"CLIP FOR ARTISTS · 0:19",
+  "ANIMACIÓN / ANUNCIO · 0:47":"ANIMATION / AD · 0:47",
+  "ANIMACIÓN / ANUNCIO · 0:43":"ANIMATION / AD · 0:43",
+  "ANIMACIÓN / ANUNCIO · 0:38":"ANIMATION / AD · 0:38",
+  '* Ejemplos hechos con contenido público de Rubius, Bad Friends, el anime Ousama Ranking y la canción "No Batidão" de ZXKAI, solo para mostrar el estilo de edición. No son clientes ni trabajos encargados.':
+    '* Examples made with public content from Rubius, Bad Friends, the anime Ousama Ranking and the song "No Batidão" by ZXKAI, only to show the editing style. They are not clients or commissioned work.',
+  "// ANUNCIOS ANIMADOS · CLIPEA":"// ANIMATED ADS · CLIPEA",
+  "* Anuncios animados para la app Clipea: guion, gancho, animación, textos y subtítulos.":"* Animated ads for the Clipea app: script, hook, animation, text and captions.",
+  "ANTES":"BEFORE", "DESPUÉS":"AFTER",
+  "Subtítulos animados":"Animated captions",
+  "Aparecen palabra por palabra y resaltan lo importante.":"They appear word by word and highlight what matters.",
+  "Gancho al inicio":"Hook at the start",
+  "Una frase en el primer segundo para que no sigan pasando.":"A line in the first second so people stop scrolling.",
+  "Zooms con impacto":"Impact zooms",
+  "Acercamientos en el momento fuerte, con efecto de sonido.":"Zoom-ins on the big moment, with sound effects.",
+  "Formato stream":"Stream layout",
+  "El juego arriba y tu cámara abajo, sin cortar nada.":"Gameplay on top and your cam below, nothing cut off.",
+  "Podcasts multicámara":"Multi-cam podcasts",
+  "El encuadre sigue a la persona que está hablando.":"The framing follows whoever is talking.",
+  "Listo para subir":"Ready to post",
+  "Con portada, descripción y hashtags.":"With cover, description and hashtags.",
+  "Resolución":"Resolution", "Fluidez":"Smoothness", "Ritmo":"Pacing",
+  "<b>1080 × 1920</b>Nítido en cualquier celular":"<b>1080 × 1920</b>Sharp on any phone",
+  "<b>Hasta 60 fps</b>Movimiento suave, sin tirones":"<b>Up to 60 fps</b>Smooth motion, no stutter",
+  "<b>Nivelado</b>Al volumen de TikTok y YouTube":"<b>Leveled</b>At TikTok and YouTube loudness",
+  "<b>Sin relleno</b>Sin silencios largos ni partes que se van del tema":"<b>No filler</b>No long silences or off-topic parts",
+  "Me pasas el link":"You send me the link",
+  "Me pasas el link de tu VOD de Twitch o Kick, tu podcast o tu video de YouTube.":"Send me the link to your Twitch or Kick VOD, your podcast or your YouTube video.",
+  "Elijo los mejores momentos":"I pick the best moments",
+  "Veo el video completo y me quedo con los momentos que más enganchan.":"I watch the whole video and keep the most engaging moments.",
+  "Recibes tus clips":"You get your clips",
+  "Recibes los clips en vertical, editados y con el texto listo para publicar.":"You get vertical, edited clips with the post text ready.",
+  "■ LISTO":"■ DONE",
+  "CACHORRO":"PUPPY", "GALGO":"GREYHOUND",
+  "Para probar cómo responde tu cuenta a los clips.":"To test how your account responds to clips.",
+  "Más de un clip para cada día de la semana.":"More than one clip for every day of the week.",
+  "Para publicar varias veces al día y no soltar el algoritmo.":"To post several times a day and never let go of the algorithm.",
+  "USD/semana":" USD/week",
+  "$5 por clip":"$5 per clip",
+  "$3.50 por clip · ahorras 30%":"$3.50 per clip · save 30%",
+  "$3.33 por clip · mejor precio":"$3.33 per clip · best price",
+  "5 clips por semana":"5 clips per week", "10 clips por semana":"10 clips per week", "15 clips por semana":"15 clips per week",
+  "Subtítulos, gancho y formato vertical":"Captions, hook and vertical format",
+  "Texto para publicar":"Post text",
+  "1 ronda de cambios":"1 round of revisions", "2 rondas de cambios":"2 rounds of revisions",
+  "Subtítulos con los colores de tu marca":"Captions in your brand colors",
+  "Entrega en 2 tandas":"Delivered in 2 batches",
+  "Estilo propio: colores y tipografía":"Your own style: colors and fonts",
+  "Quiero este":"I want this one", "MÁS ELEGIDO":"MOST POPULAR",
+  "* Pagas semana a semana. Servicios aparte: publicar en tus cuentas y entregas urgentes.":"* You pay week by week. Extra services: posting on your accounts and rush delivery.",
+  "¿No sabes cuál elegir?":"Not sure which one?",
+  "Pide tus 2 clips gratis o armamos un paquete a tu medida.":"Ask for your 2 free clips or we'll build a custom package.",
+  "Editor y diseñador gráfico desde Santa Cruz, Bolivia. Hago contenido corto en formato vertical, y también videos horizontales: para lo que necesites, ahí estoy.":
+    "Video editor and graphic designer from Santa Cruz, Bolivia. I make short vertical content and also horizontal videos: whatever you need, I've got you.",
+  "Trabajas directamente conmigo, sin intermediarios. Siempre voy a estar pendiente de mis clientes.":"You work directly with me, no middlemen. I'm always there for my clients.",
+  "¿Cuánto tardas en entregar?":"How long does delivery take?",
+  "Entre 1 y 4 días, según el paquete y la duración del video.":"Between 1 and 4 days, depending on the package and the video length.",
+  "¿Cuántos clips salen de un stream?":"How many clips come out of a stream?",
+  "Depende del contenido. Un stream de 2 o 3 horas suele dar entre 5 y 15 buenos momentos.":"It depends on the content. A 2–3 hour stream usually gives 5 to 15 good moments.",
+  "¿Qué necesito enviarte?":"What do I need to send you?",
+  "Solo el link del video (YouTube, Twitch, Kick, Drive…). Si tienes logo o colores de marca, mándalos también.":"Just the video link (YouTube, Twitch, Kick, Drive…). If you have a logo or brand colors, send them too.",
+  "¿Cómo recibo los clips?":"How do I get the clips?",
+  "En MP4 vertical de 1080×1920, por Google Drive o por donde prefieras.":"As vertical 1080×1920 MP4 files, via Google Drive or wherever you prefer.",
+  "¿Quién publica los clips?":"Who posts the clips?",
+  "Normalmente tú. Si quieres, los publico en tus cuentas por un costo extra.":"Usually you. If you want, I can post them on your accounts for an extra fee.",
+  "¿También haces videos horizontales?":"Do you also edit horizontal videos?",
+  "Sí. Además de clips verticales, edito videos horizontales para YouTube y otros formatos. Escríbeme y lo armamos.":"Yes. Besides vertical clips, I edit horizontal videos for YouTube and other formats. Write me and we'll set it up.",
+  "¿Trabajas con contenido en inglés?":"Do you work with English content?",
+  "Sí, en español y en inglés.":"Yes, in Spanish and English.",
+  "¿Cómo se paga?":"How do I pay?",
+  "Semana a semana. De preferencia por <b>Binance</b> (USDT). También acepto PayPal, transferencia u otro método que acordemos.":"Week by week. Preferably via <b>Binance</b> (USDT). I also accept PayPal, bank transfer or another method we agree on.",
+  "¿Mi contenido queda privado?":"Is my content kept private?",
+  "Sí. No publico ni comparto tu material sin tu permiso.":"Yes. I never post or share your material without your permission.",
+  "Mándame el link de tu último video y en pocos días tienes tu muestra. Sin compromiso.":"Send me the link to your latest video and you'll have your sample in a few days. No commitment.",
+  "Clips para creadores · Hecho por Nicolas desde Santa Cruz, Bolivia ·":"Clips for creators · Made by Nicolas from Santa Cruz, Bolivia ·"
+};
+const PRE_EN = "+--------------------------------------+\n" +
+               "|  &gt; STARTING THE HUNT...        [OK]  |\n" +
+               "|  &gt; 2 FREE CLIPS LOADED         [OK]  |\n" +
+               "|  &gt; WAITING FOR YOUR LINK_            |\n" +
+               "+--------------------------------------+";
+const ATTR_EN = {
+  "Video original del podcast en horizontal":"Original horizontal podcast video",
+  "El mismo momento editado en vertical, encuadrado en quien habla, con subtítulos":"The same moment edited vertically, framed on the speaker, with captions",
+  "Comparar antes y después":"Compare before and after"
+};
+const TICK = {
+  es:" ▓ CLIPS VERTICALES ▓ TIKTOK ▓ REELS ▓ SHORTS ▓ 1080×1920 ▓ 60 FPS ▓ 2 CLIPS GRATIS ▓ HUNTDOG CLIPPER",
+  en:" ▓ VERTICAL CLIPS ▓ TIKTOK ▓ REELS ▓ SHORTS ▓ 1080×1920 ▓ 60 FPS ▓ 2 FREE CLIPS ▓ HUNTDOG CLIPPER"
+};
+const I18N_SEL = 'nav .links a, nav .wrap > .btn, h1, .lead, .offer strong, .offer p, .offer .btn, .t-i, .copy, .stats span, '+
+  '.track .txt, .label, h2, .head p, .clip h3, .clip small, .note, .subhead, .lbl, .feat h3, .feat p, .spec span, '+
+  '.step h3, .step p, .arrow, .tier, .desc, .price small, .per, .plan li, .plan .btn, .stamp, .extra, '+
+  '.band h3, .band p, .band .btn, .about p, summary, details p, .final pre, .final p';
+const i18nEls = [...document.querySelectorAll(I18N_SEL)];
+i18nEls.forEach(el=>el.dataset.es = el.innerHTML);
+const attrEls = [...document.querySelectorAll('[alt],[aria-label]')].filter(el=>ATTR_EN[el.getAttribute('alt')||el.getAttribute('aria-label')]);
+attrEls.forEach(el=>el.dataset.esAttr = el.hasAttribute('alt') ? 'alt' : 'aria-label');
+attrEls.forEach(el=>el.dataset.esVal = el.getAttribute(el.dataset.esAttr));
+
+function setLang(l){
+  LANG = l;
+  document.documentElement.lang = l;
+  i18nEls.forEach(el=>{
+    const es = el.dataset.es;
+    if(l==='es'){ el.innerHTML = es; return; }
+    if(el.matches('.final pre')){ el.innerHTML = PRE_EN; return; }
+    const en = EN[es.trim()];
+    if(en !== undefined) el.innerHTML = en;
+  });
+  attrEls.forEach(el=>el.setAttribute(el.dataset.esAttr, l==='es' ? el.dataset.esVal : ATTR_EN[el.dataset.esVal]));
+  document.getElementById('tick').textContent = TICK[l].repeat(6);
+  document.querySelector('.offer').dataset.tag = l==='es' ? '[ PRUEBA GRATIS ]' : '[ FREE TRIAL ]';
+  document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.l===l)));
+  applyContact();
+  try{ localStorage.setItem('huntdog-lang', l); }catch(e){}
+}
+document.querySelectorAll('.lang button').forEach(b=>b.onclick=()=>setLang(b.dataset.l));
+let startLang = 'es';
+try{ startLang = localStorage.getItem('huntdog-lang') || ''; }catch(e){ startLang = ''; }
+if(!startLang) startLang = (navigator.language||'es').toLowerCase().startsWith('es') ? 'es' : 'en';
+setLang(startLang==='en' ? 'en' : 'es');
+
 </script>
 </body>
 </html>
